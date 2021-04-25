@@ -12,10 +12,18 @@ class WeatherWatch extends React.Component {
 
 	updateWeather(response) {
 		this.setState({
-			lat: response.latitude,
-			lon: response.longitude,
+			lat: response.lat,
+			lon: response.lon,
 			weather: response.weather,
 		});
+	}
+
+	status(response) {
+		if (response.status >= 200 && response.status < 300) {
+			return Promise.resolve(response);
+		} else {
+			return Promise.reject(new Error(response.statusText));
+		}
 	}
 
 	componentDidMount() {
@@ -28,8 +36,13 @@ class WeatherWatch extends React.Component {
 		fetch(
 			"https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&appid=ed18e45826554b0f52007a1992b575df"
 		)
+			.then(this.status)
 			.then((response) => response.json())
-			.then((response) => this.updateWeather(response));
+			.then((response) => this.updateWeather(response))
+			.catch((error) => {
+				console.error(error);
+				alert(error);
+			});
 	}
 
 	render() {
