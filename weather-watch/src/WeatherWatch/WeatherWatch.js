@@ -32,6 +32,7 @@ class WeatherWatch extends React.Component {
 		console.log(response);
 		this.setState({
 			description: response.weather[0].description,
+			icon: `http://openweathermap.org/img/wn/${response.weather[0].icon}.png`,
 			temp: response.temp.day,
 			humidity: response.humidity,
 			windSpeed: response.wind_speed,
@@ -51,14 +52,13 @@ class WeatherWatch extends React.Component {
 				<h2>Luton</h2>
 				<p>
 					<b>Weather: </b>
-					{this.state.weather}
-				</p>
-				<p>
-					<b>Icon: </b>
+					<img src={this.state.icon} alt="Icon of weather" />
+					<br />
+					{this.state.description}
 				</p>
 				<p>
 					<b>Temperature: </b>
-					{this.state.temp}
+					{this.state.temp}°C
 				</p>
 				<p>
 					<b>Humidity: </b>
