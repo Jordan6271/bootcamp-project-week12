@@ -10,8 +10,6 @@ class WeatherWatch extends React.Component {
 		this.state = {
 			weather: [],
 			loadState: "",
-			// sunrise: "",
-			// sunset: "",
 		};
 		this.apiClient = new ApiClient();
 	}
@@ -56,15 +54,7 @@ class WeatherWatch extends React.Component {
 	}
 
 	updateWeather(response) {
-		// const sunriseTime = new Date(
-		// 	parseInt(response.sunrise) * 1000
-		// ).toLocaleTimeString();
-		// const sunsetTime = new Date(
-		// 	parseInt(response.sunset) * 1000
-		// ).toLocaleTimeString();
 		this.setState({
-			// sunrise: sunriseTime,
-			// sunset: sunsetTime,
 			weather: response,
 		});
 	}
