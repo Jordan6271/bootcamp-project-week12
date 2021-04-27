@@ -1,18 +1,20 @@
 import React from "react";
 import { ApiClient } from "./ApiClient/ApiClient";
+import Cards from "./Card/Card";
 
 class WeatherWatch extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			description: "",
+			date: "",
 			icon: "",
-			temp: "",
+			description: "",
+			minTemp: "",
+			maxTemp: "",
 			humidity: "",
 			windSpeed: "",
 			sunrise: "",
 			sunset: "",
-			appid: "ed18e45826554b0f52007a1992b575df",
 		};
 		this.apiClient = new ApiClient();
 	}
@@ -30,14 +32,25 @@ class WeatherWatch extends React.Component {
 
 	updateWeather(response) {
 		console.log(response);
+		const dateTime = new Date(
+			parseInt(response.dt) * 1000
+		).toLocaleDateString();
+		const sunriseTime = new Date(
+			parseInt(response.sunrise) * 1000
+		).toLocaleTimeString();
+		const sunsetTime = new Date(
+			parseInt(response.sunset) * 1000
+		).toLocaleTimeString();
 		this.setState({
-			description: response.weather[0].description,
+			date: dateTime,
 			icon: `http://openweathermap.org/img/wn/${response.weather[0].icon}.png`,
-			temp: response.temp.day,
+			description: response.weather[0].description,
+			minTemp: response.temp.min,
+			maxTemp: response.temp.max,
 			humidity: response.humidity,
 			windSpeed: response.wind_speed,
-			sunrise: response.sunrise,
-			sunset: response.sunset,
+			sunrise: sunriseTime,
+			sunset: sunsetTime,
 		});
 	}
 
@@ -49,33 +62,17 @@ class WeatherWatch extends React.Component {
 		return (
 			<div>
 				<h1>Weather Watch</h1>
-				<h2>Luton</h2>
-				<p>
-					<b>Weather: </b>
-					<img src={this.state.icon} alt="Icon of weather" />
-					<br />
-					{this.state.description}
-				</p>
-				<p>
-					<b>Temperature: </b>
-					{this.state.temp}°C
-				</p>
-				<p>
-					<b>Humidity: </b>
-					{this.state.humidity}
-				</p>
-				<p>
-					<b>Wind Speed: </b>
-					{this.state.windSpeed}
-				</p>
-				<p>
-					<b>Sunrise: </b>
-					{this.state.sunrise}
-				</p>
-				<p>
-					<b>Sunset: </b>
-					{this.state.sunset}
-				</p>
+				<Cards
+					date={this.state.date}
+					icon={this.state.icon}
+					description={this.state.description}
+					minTemp={this.state.minTemp}
+					maxTemp={this.state.maxTemp}
+					humidity={this.state.humidity}
+					windSpeed={this.state.windSpeed}
+					sunrise={this.state.sunrise}
+					sunset={this.state.sunset}
+				/>
 			</div>
 		);
 	}
