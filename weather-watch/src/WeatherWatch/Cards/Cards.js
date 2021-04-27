@@ -3,21 +3,26 @@ import Card from "react-bootstrap/Card";
 
 class Cards extends React.Component {
 	render() {
-		const date = this.props.date;
-		const icon = this.props.icon;
+		const date = new Date(
+			parseInt(this.props.date) * 1000
+		).toLocaleDateString();
+		const icon = `http://openweathermap.org/img/wn/${this.props.icon}.png`;
 		const description = this.props.description;
 		const minTemp = this.props.minTemp;
 		const maxTemp = this.props.maxTemp;
 		const humidity = this.props.humidity;
 		const windSpeed = this.props.windSpeed;
-		const sunrise = this.props.sunrise;
-		const sunset = this.props.sunset;
+		const sunrise = new Date(
+			parseInt(this.props.sunrise) * 1000
+		).toLocaleTimeString();
+		const sunset = new Date(
+			parseInt(this.props.sunset) * 1000
+		).toLocaleTimeString();
 
 		return (
 			<div>
 				<Card>
 					<Card.Header>
-						<h2>Luton</h2>
 						<h3>Date: {date}</h3>
 					</Card.Header>
 					<Card.Body>
@@ -26,7 +31,7 @@ class Cards extends React.Component {
 								textTransform: "capitalize",
 							}}
 						>
-							<img src={icon} alt="Icon of weather" />
+							<img src={icon} alt={description} />
 							<br />
 							{description}
 						</p>

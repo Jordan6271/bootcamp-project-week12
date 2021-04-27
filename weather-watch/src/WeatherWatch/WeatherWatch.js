@@ -1,56 +1,61 @@
 import React from "react";
 import { ApiClient } from "./ApiClient/ApiClient";
-import Cards from "./Card/Card";
+import Col from "react-bootstrap/Col";
+import CardGroup from "react-bootstrap/CardGroup";
+import Cards from "./Cards/Cards";
 
 class WeatherWatch extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			date: "",
-			icon: "",
-			description: "",
-			minTemp: "",
-			maxTemp: "",
-			humidity: "",
-			windSpeed: "",
-			sunrise: "",
-			sunset: "",
+			weather: [],
+			loadState: "",
 		};
 		this.apiClient = new ApiClient();
 	}
 
+	createCards() {
+		return this.state.weather.slice(1, 8).map((current, i) => (
+			<Col key={i}>
+				<CardGroup>
+					<Cards
+						date={current.dt}
+						icon={current.weather[0].icon}
+						description={current.weather[0].description}
+						minTemp={current.temp.min}
+						maxTemp={current.temp.max}
+						humidity={current.humidity}
+						windSpeed={current.wind_speed}
+						sunrise={current.sunrise}
+						sunset={current.sunset}
+					/>
+					;
+				</CardGroup>
+			</Col>
+		));
+	}
+
 	getWeather() {
 		this.setState({
-			description: "Loading weather...",
+			loadState: "Loading weather...",
 			fetching: true,
 		});
 
-		this.apiClient.fetchWeatherApi().then((response) => {
-			this.updateWeather(response.data.daily[0]);
-		});
+		this.apiClient
+			.fetchWeatherApi()
+			.then((response) => {
+				this.updateWeather(response.data.daily);
+			})
+			.finally(() => {
+				this.setState({
+					loadState: "",
+				});
+			});
 	}
 
 	updateWeather(response) {
-		console.log(response);
-		const dateTime = new Date(
-			parseInt(response.dt) * 1000
-		).toLocaleDateString();
-		const sunriseTime = new Date(
-			parseInt(response.sunrise) * 1000
-		).toLocaleTimeString();
-		const sunsetTime = new Date(
-			parseInt(response.sunset) * 1000
-		).toLocaleTimeString();
 		this.setState({
-			date: dateTime,
-			icon: `http://openweathermap.org/img/wn/${response.weather[0].icon}.png`,
-			description: response.weather[0].description,
-			minTemp: response.temp.min,
-			maxTemp: response.temp.max,
-			humidity: response.humidity,
-			windSpeed: response.wind_speed,
-			sunrise: sunriseTime,
-			sunset: sunsetTime,
+			weather: response,
 		});
 	}
 
@@ -62,17 +67,8 @@ class WeatherWatch extends React.Component {
 		return (
 			<div>
 				<h1>Weather Watch</h1>
-				<Cards
-					date={this.state.date}
-					icon={this.state.icon}
-					description={this.state.description}
-					minTemp={this.state.minTemp}
-					maxTemp={this.state.maxTemp}
-					humidity={this.state.humidity}
-					windSpeed={this.state.windSpeed}
-					sunrise={this.state.sunrise}
-					sunset={this.state.sunset}
-				/>
+				<h2>Luton</h2>
+				{this.createCards()}
 			</div>
 		);
 	}
