@@ -1,7 +1,7 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 
-class Cards extends React.Component {
+class WeeklyCard extends React.Component {
 	render() {
 		const date = new Date(
 			parseInt(this.props.date) * 1000
@@ -66,4 +66,4 @@ class Cards extends React.Component {
 	}
 }
 
-export default Cards;
+export default WeeklyCard;

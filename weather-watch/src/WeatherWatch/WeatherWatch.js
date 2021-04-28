@@ -1,21 +1,26 @@
 import React from "react";
 import { ApiClient } from "./ApiClient/ApiClient";
+import Cards from "./Cards/Cards";
+
+import Navbar from "react-bootstrap/Navbar";
+import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import CardGroup from "react-bootstrap/CardGroup";
-import Cards from "./Cards/Cards";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 class WeatherWatch extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			weather: [],
+			currentWeather: [],
+			dailyWeather: [],
 			loadState: "",
 		};
 		this.apiClient = new ApiClient();
 	}
 
 	createCards() {
-		return this.state.weather.slice(1, 8).map((current, i) => (
+		return this.state.dailyWeather.slice(0, 8).map((current, i) => (
 			<Col key={i}>
 				<CardGroup>
 					<Cards
@@ -29,7 +34,6 @@ class WeatherWatch extends React.Component {
 						sunrise={current.sunrise}
 						sunset={current.sunset}
 					/>
-					;
 				</CardGroup>
 			</Col>
 		));
@@ -42,9 +46,9 @@ class WeatherWatch extends React.Component {
 		});
 
 		this.apiClient
-			.fetchWeatherApi()
+			.fetchWeatherApi("Luton")
 			.then((response) => {
-				this.updateWeather(response.data.daily);
+				this.updateWeather(response.data);
 			})
 			.finally(() => {
 				this.setState({
@@ -54,8 +58,10 @@ class WeatherWatch extends React.Component {
 	}
 
 	updateWeather(response) {
+		console.log(response.current.temp);
 		this.setState({
-			weather: response,
+			currentWeather: response.current,
+			dailyWeather: response.daily,
 		});
 	}
 
@@ -66,9 +72,16 @@ class WeatherWatch extends React.Component {
 	render() {
 		return (
 			<div>
-				<h1>Weather Watch</h1>
-				<h2>Luton</h2>
-				{this.createCards()}
+				<Navbar bg="dark" variant="dark">
+					<Navbar.Brand>Weather Watch</Navbar.Brand>
+					<div class="navbar-nav">
+						<span class="nav-link disabled text-danger">Luton</span>
+					</div>
+				</Navbar>
+				<Container>
+					<b>Current Temp: {this.state.currentWeather.temp}</b>
+					{this.createCards()}
+				</Container>
 			</div>
 		);
 	}
