@@ -3,15 +3,19 @@ import { ApiClient } from "./ApiClient/ApiClient";
 import Cards from "./Cards/Cards";
 
 import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import CardGroup from "react-bootstrap/CardGroup";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+import { HashRouter as Router, Switch, Route, Link } from "react-router-dom";
+
 class WeatherWatch extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			location: "Luton",
 			currentWeather: [],
 			dailyWeather: [],
 			loadState: "",
@@ -39,6 +43,17 @@ class WeatherWatch extends React.Component {
 		));
 	}
 
+	changeLocation(current) {
+		this.setState(
+			{
+				location: current,
+			},
+			() => {
+				this.getWeather();
+			}
+		);
+	}
+
 	getWeather() {
 		this.setState({
 			loadState: "Loading weather...",
@@ -46,7 +61,7 @@ class WeatherWatch extends React.Component {
 		});
 
 		this.apiClient
-			.fetchWeatherApi("Luton")
+			.fetchWeatherApi(this.state.location)
 			.then((response) => {
 				this.updateWeather(response.data);
 			})
@@ -58,7 +73,7 @@ class WeatherWatch extends React.Component {
 	}
 
 	updateWeather(response) {
-		console.log(response.current.temp);
+		console.log(response);
 		this.setState({
 			currentWeather: response.current,
 			dailyWeather: response.daily,
@@ -71,18 +86,70 @@ class WeatherWatch extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<Router>
 				<Navbar bg="dark" variant="dark">
 					<Navbar.Brand>Weather Watch</Navbar.Brand>
-					<div class="navbar-nav">
-						<span class="nav-link disabled text-danger">Luton</span>
-					</div>
+					<Navbar.Toggle aria-controls="basic-navbar-nav" />
+					<Navbar.Collapse id="basic-navbar-nav">
+						<Nav className="mr-auto">
+							<Link
+								to="/Luton"
+								className="nav-link text-danger"
+								onClick={() => this.changeLocation("Luton")}
+							>
+								Luton
+							</Link>
+							<Link
+								to="/London"
+								className="nav-link text-danger"
+								onClick={() => this.changeLocation("London")}
+							>
+								London
+							</Link>
+							<Link
+								to="/Sheffield"
+								className="nav-link text-danger"
+								onClick={() => this.changeLocation("Sheffield")}
+							>
+								Sheffield
+							</Link>
+						</Nav>
+					</Navbar.Collapse>
 				</Navbar>
 				<Container>
-					<b>Current Temp: {this.state.currentWeather.temp}</b>
-					{this.createCards()}
+					<Switch>
+						<Route path="/Luton">
+							<h1>{this.state.location}</h1>
+							<b>
+								Current Temp: {this.state.currentWeather.temp}
+							</b>
+							{this.createCards()}
+						</Route>
+						<Route path="/London">
+							<h1>{this.state.location}</h1>
+							<b>
+								Current Temp: {this.state.currentWeather.temp}
+							</b>
+							{this.createCards()}
+						</Route>
+						<Route path="/Sheffield">
+							<h1>{this.state.location}</h1>
+							<b>
+								Current Temp: {this.state.currentWeather.temp}
+							</b>
+							{this.createCards()}
+						</Route>
+						<Route exact path="/">
+							<h1>{this.state.location}</h1>
+							<b>
+								Current Temp: {this.state.currentWeather.temp}
+							</b>
+							{this.createCards()}
+						</Route>
+						<Route path="/">That location is not supported.</Route>
+					</Switch>
 				</Container>
-			</div>
+			</Router>
 		);
 	}
 }
