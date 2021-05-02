@@ -6,8 +6,11 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 import CardGroup from "react-bootstrap/CardGroup";
 import "bootstrap/dist/css/bootstrap.min.css";
+
+import ReactCardCarousel from "react-card-carousel";
 
 import { HashRouter as Router, Switch, Route, Link } from "react-router-dom";
 
@@ -24,7 +27,7 @@ class WeatherWatch extends React.Component {
 	}
 
 	createCards() {
-		return this.state.dailyWeather.slice(0, 8).map((current, i) => (
+		return this.state.dailyWeather.slice(0, 7).map((current, i) => (
 			<Col key={i}>
 				<CardGroup>
 					<Cards
@@ -73,7 +76,6 @@ class WeatherWatch extends React.Component {
 	}
 
 	updateWeather(response) {
-		console.log(response);
 		this.setState({
 			currentWeather: response.current,
 			dailyWeather: response.daily,
@@ -119,32 +121,101 @@ class WeatherWatch extends React.Component {
 				<Container>
 					<Switch>
 						<Route path="/Luton">
-							<h1>
-								{this.state.location} (
-								{this.state.currentWeather.temp}°C)
+							<h1
+								style={{
+									textAlign: "center",
+									marginTop: "20px",
+								}}
+							>
+								{this.state.location}{" "}
+								<span
+									style={{
+										fontWeight: "normal",
+										fontSize: "2rem",
+									}}
+								>
+									(currently {this.state.currentWeather.temp}
+									°C)
+								</span>
 							</h1>
-							{this.createCards()}
+							<Row>
+								<ReactCardCarousel disable_box_shadow={true}>
+									{this.createCards()}
+								</ReactCardCarousel>
+							</Row>
 						</Route>
 						<Route path="/London">
-							<h1>
-								{this.state.location} (
-								{this.state.currentWeather.temp}°C)
+							<h1
+								style={{
+									textAlign: "center",
+									marginTop: "20px",
+								}}
+							>
+								{this.state.location}{" "}
+								<span
+									style={{
+										fontWeight: "normal",
+										fontSize: "2rem",
+									}}
+								>
+									(currently {this.state.currentWeather.temp}
+									°C)
+								</span>
 							</h1>
-							{this.createCards()}
+							<Row>
+								<ReactCardCarousel disable_box_shadow={true}>
+									{this.createCards()}
+								</ReactCardCarousel>
+							</Row>
 						</Route>
 						<Route path="/Sheffield">
-							<h1>
-								{this.state.location} (
-								{this.state.currentWeather.temp}°C)
+							<h1
+								style={{
+									textAlign: "center",
+									marginTop: "20px",
+								}}
+							>
+								{this.state.location}{" "}
+								<span
+									style={{
+										fontWeight: "normal",
+										fontSize: "2rem",
+									}}
+								>
+									(currently {this.state.currentWeather.temp}
+									°C)
+								</span>
 							</h1>
-							{this.createCards()}
+							<Row>
+								<ReactCardCarousel disable_box_shadow={true}>
+									{this.createCards()}
+								</ReactCardCarousel>
+							</Row>
 						</Route>
 						<Route exact path="/">
-							<h1>
-								{this.state.location} (
-								{this.state.currentWeather.temp}°C)
+							<h1
+								style={{
+									textAlign: "center",
+									marginTop: "20px",
+									marginBottom: "80px",
+								}}
+							>
+								{this.state.location}{" "}
+								<span
+									style={{
+										fontWeight: "normal",
+										fontSize: "2rem",
+									}}
+								>
+									(currently {this.state.currentWeather.temp}
+									°C)
+								</span>
 							</h1>
-							{this.createCards()}
+							<Row>
+								<ReactCardCarousel disable_box_shadow={true}>
+									{this.createCards()}
+								</ReactCardCarousel>
+							</Row>
 						</Route>
 						<Route path="/">That location is not supported.</Route>
 					</Switch>
