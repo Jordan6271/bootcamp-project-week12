@@ -119,31 +119,31 @@ class WeatherWatch extends React.Component {
 				<Container>
 					<Switch>
 						<Route path="/Luton">
-							<h1>{this.state.location}</h1>
-							<b>
-								Current Temp: {this.state.currentWeather.temp}
-							</b>
+							<h1>
+								{this.state.location} (
+								{this.state.currentWeather.temp}°C)
+							</h1>
 							{this.createCards()}
 						</Route>
 						<Route path="/London">
-							<h1>{this.state.location}</h1>
-							<b>
-								Current Temp: {this.state.currentWeather.temp}
-							</b>
+							<h1>
+								{this.state.location} (
+								{this.state.currentWeather.temp}°C)
+							</h1>
 							{this.createCards()}
 						</Route>
 						<Route path="/Sheffield">
-							<h1>{this.state.location}</h1>
-							<b>
-								Current Temp: {this.state.currentWeather.temp}
-							</b>
+							<h1>
+								{this.state.location} (
+								{this.state.currentWeather.temp}°C)
+							</h1>
 							{this.createCards()}
 						</Route>
 						<Route exact path="/">
-							<h1>{this.state.location}</h1>
-							<b>
-								Current Temp: {this.state.currentWeather.temp}
-							</b>
+							<h1>
+								{this.state.location} (
+								{this.state.currentWeather.temp}°C)
+							</h1>
 							{this.createCards()}
 						</Route>
 						<Route path="/">That location is not supported.</Route>
