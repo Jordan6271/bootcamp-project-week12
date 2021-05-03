@@ -33,6 +33,7 @@ const WeeklyCard = (props) => {
 	return (
 		<div>
 			<Card
+				className="pt-5 pt-md-0"
 				style={{
 					width: "250px",
 					minHeight: "500px",

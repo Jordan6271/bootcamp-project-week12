@@ -121,23 +121,21 @@ class WeatherWatch extends React.Component {
 				<Container>
 					<Switch>
 						<Route path="/Luton">
-							<h1
-								style={{
-									textAlign: "center",
-									marginTop: "20px",
-								}}
-							>
-								{this.state.location}{" "}
-								<span
+							<div className="header">
+								<h1
 									style={{
-										fontWeight: "normal",
-										fontSize: "2rem",
+										textAlign: "center",
+										marginTop: "20px",
 									}}
 								>
-									(currently {this.state.currentWeather.temp}
-									°C)
-								</span>
-							</h1>
+									{this.state.location}{" "}
+									<span className="header-info">
+										(currently{" "}
+										{this.state.currentWeather.temp}
+										°C)
+									</span>
+								</h1>
+							</div>
 							<Row>
 								<ReactCardCarousel disable_box_shadow={true}>
 									{this.createCards()}
@@ -145,23 +143,26 @@ class WeatherWatch extends React.Component {
 							</Row>
 						</Route>
 						<Route path="/London">
-							<h1
-								style={{
-									textAlign: "center",
-									marginTop: "20px",
-								}}
-							>
-								{this.state.location}{" "}
-								<span
+							<div id="header">
+								<h1
 									style={{
-										fontWeight: "normal",
-										fontSize: "2rem",
+										textAlign: "center",
+										marginTop: "20px",
 									}}
 								>
-									(currently {this.state.currentWeather.temp}
-									°C)
-								</span>
-							</h1>
+									{this.state.location}{" "}
+									<span
+										style={{
+											fontWeight: "normal",
+											fontSize: "2rem",
+										}}
+									>
+										(currently{" "}
+										{this.state.currentWeather.temp}
+										°C)
+									</span>
+								</h1>
+							</div>
 							<Row>
 								<ReactCardCarousel disable_box_shadow={true}>
 									{this.createCards()}
@@ -169,23 +170,26 @@ class WeatherWatch extends React.Component {
 							</Row>
 						</Route>
 						<Route path="/Sheffield">
-							<h1
-								style={{
-									textAlign: "center",
-									marginTop: "20px",
-								}}
-							>
-								{this.state.location}{" "}
-								<span
+							<div id="header">
+								<h1
 									style={{
-										fontWeight: "normal",
-										fontSize: "2rem",
+										textAlign: "center",
+										marginTop: "20px",
 									}}
 								>
-									(currently {this.state.currentWeather.temp}
-									°C)
-								</span>
-							</h1>
+									{this.state.location}{" "}
+									<span
+										style={{
+											fontWeight: "normal",
+											fontSize: "2rem",
+										}}
+									>
+										(currently{" "}
+										{this.state.currentWeather.temp}
+										°C)
+									</span>
+								</h1>
+							</div>
 							<Row>
 								<ReactCardCarousel disable_box_shadow={true}>
 									{this.createCards()}
@@ -193,24 +197,26 @@ class WeatherWatch extends React.Component {
 							</Row>
 						</Route>
 						<Route exact path="/">
-							<h1
-								style={{
-									textAlign: "center",
-									marginTop: "20px",
-									marginBottom: "80px",
-								}}
-							>
-								{this.state.location}{" "}
-								<span
+							<div id="header">
+								<h1
 									style={{
-										fontWeight: "normal",
-										fontSize: "2rem",
+										textAlign: "center",
+										marginTop: "20px",
 									}}
 								>
-									(currently {this.state.currentWeather.temp}
-									°C)
-								</span>
-							</h1>
+									{this.state.location}{" "}
+									<span
+										style={{
+											fontWeight: "normal",
+											fontSize: "2rem",
+										}}
+									>
+										(currently{" "}
+										{this.state.currentWeather.temp}
+										°C)
+									</span>
+								</h1>
+							</div>
 							<Row>
 								<ReactCardCarousel disable_box_shadow={true}>
 									{this.createCards()}
