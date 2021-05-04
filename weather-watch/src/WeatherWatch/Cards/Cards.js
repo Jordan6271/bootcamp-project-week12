@@ -30,11 +30,20 @@ const WeeklyCard = (props) => {
 	const sunset = new Date(parseInt(props.sunset) * 1000).toLocaleTimeString();
 
 	function fixDate(date) {
-		if (date.toString().match(/.*[1]$/g)) {
+		if (
+			date.toString().match(/.*[1]$/g) &&
+			!date.toString().match(/.*[11]$/g)
+		) {
 			return `${date}st`;
-		} else if (date.toString().match(/.*[2]$/g)) {
+		} else if (
+			date.toString().match(/.*[2]$/g) &&
+			!date.toString().match(/.*[12]$/g)
+		) {
 			return `${date}nd`;
-		} else if (date.toString().match(/.*[3]$/g)) {
+		} else if (
+			date.toString().match(/.*[3]$/g) &&
+			!date.toString().match(/.*[13]$/g)
+		) {
 			return `${date}rd`;
 		} else {
 			return `${date}th`;
