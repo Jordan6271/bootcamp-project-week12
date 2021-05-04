@@ -1,12 +1,23 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
-import { days, months } from "../Date/Date";
 
 const WeeklyCard = (props) => {
-	const timestamp = new Date(parseInt(props.date) * 1000);
-	const dateDay = days[timestamp.getDay(timestamp)];
-	const dateMonth = months[timestamp.getMonth(timestamp)];
-	const date = fixDate(timestamp.getDate(timestamp));
+	const dateWeekday = new Date(
+		parseInt(props.date) * 1000
+	).toLocaleDateString("en-GB", {
+		weekday: "short",
+	});
+	const dateDay = fixDate(
+		new Date(parseInt(props.date) * 1000).toLocaleDateString("en-GB", {
+			day: "numeric",
+		})
+	);
+	const dateMonth = new Date(parseInt(props.date) * 1000).toLocaleDateString(
+		"en-GB",
+		{
+			month: "short",
+		}
+	);
 	const icon = `http://openweathermap.org/img/wn/${props.icon}@2x.png`;
 	const description = props.description;
 	const minTemp = props.minTemp;
@@ -45,7 +56,7 @@ const WeeklyCard = (props) => {
 			>
 				<Card.Header className="bg-primary">
 					<h3>
-						{dateDay} {date} {dateMonth}
+						{dateWeekday} {dateDay} {dateMonth}
 					</h3>
 				</Card.Header>
 				<Card.Body
