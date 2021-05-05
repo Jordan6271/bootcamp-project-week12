@@ -18,6 +18,8 @@ const WeatherWatch = () => {
     const [location, setLocation] = useState(`Luton`);
     const [currentWeather, setCurrentWeather] = useState([]);
     const [dailyWeather, setDailyWeather] = useState([]);
+    const apiClient = new ApiClient();
+
     const createCards = () => {
         return dailyWeather.slice(0, 7).map((current, i) => (
             <Col key={i}>
@@ -38,25 +40,22 @@ const WeatherWatch = () => {
         ));
     };
 
-    const changeLocation = (current) => {
-        setLocation(current);
-    };
-
-    const updateWeather = (response) => {
+    const updateWeather = (response, location) => {
+        setLocation(location);
         setCurrentWeather(response.current);
         setDailyWeather(response.daily);
     };
 
-    useEffect(() => {
-        const apiClient = new ApiClient();
-        let fetching = true;
+    const fetchData = (location) => {
         apiClient.fetchWeatherApi(location).then((response) => {
-            if (fetching) {
-                updateWeather(response.data);
-            }
+            updateWeather(response.data, location);
         });
-        return () => (fetching = false);
-    }, [location]);
+    };
+
+    useEffect(() => {
+        fetchData("Luton");
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Router>
@@ -68,21 +67,21 @@ const WeatherWatch = () => {
                         <Link
                             to="/Luton"
                             className="nav-link text-danger"
-                            onClick={() => changeLocation("Luton")}
+                            onClick={() => fetchData("Luton")}
                         >
                             Luton
                         </Link>
                         <Link
                             to="/London"
                             className="nav-link text-danger"
-                            onClick={() => changeLocation("London")}
+                            onClick={() => fetchData("London")}
                         >
                             London
                         </Link>
                         <Link
                             to="/Sheffield"
                             className="nav-link text-danger"
-                            onClick={() => changeLocation("Sheffield")}
+                            onClick={() => fetchData("Sheffield")}
                         >
                             Sheffield
                         </Link>
