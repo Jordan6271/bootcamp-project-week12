@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ApiClient } from "./ApiClient/ApiClient";
 import Cards from "./Cards/Cards";
 
@@ -14,20 +14,12 @@ import ReactCardCarousel from "react-card-carousel";
 
 import { HashRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-class WeatherWatch extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            location: "Luton",
-            currentWeather: [],
-            dailyWeather: [],
-            loadState: "",
-        };
-        this.apiClient = new ApiClient();
-    }
-
-    createCards = () => {
-        return this.state.dailyWeather.slice(0, 7).map((current, i) => (
+const WeatherWatch = () => {
+    const [location, setLocation] = useState(`Luton`);
+    const [currentWeather, setCurrentWeather] = useState([]);
+    const [dailyWeather, setDailyWeather] = useState([]);
+    const createCards = () => {
+        return dailyWeather.slice(0, 7).map((current, i) => (
             <Col key={i}>
                 <CardGroup>
                     <Cards
@@ -46,189 +38,163 @@ class WeatherWatch extends React.Component {
         ));
     };
 
-    changeLocation = (current) => {
-        this.setState(
-            {
-                location: current,
-            },
-            () => {
-                this.getWeather();
+    const changeLocation = (current) => {
+        setLocation(current);
+    };
+
+    const updateWeather = (response) => {
+        setCurrentWeather(response.current);
+        setDailyWeather(response.daily);
+    };
+
+    useEffect(() => {
+        const apiClient = new ApiClient();
+        let fetching = true;
+        apiClient.fetchWeatherApi(location).then((response) => {
+            if (fetching) {
+                updateWeather(response.data);
             }
-        );
-    };
-
-    getWeather = () => {
-        this.setState({
-            loadState: "Loading weather...",
-            fetching: true,
         });
+        return () => (fetching = false);
+    }, [location]);
 
-        this.apiClient
-            .fetchWeatherApi(this.state.location)
-            .then((response) => {
-                this.updateWeather(response.data);
-            })
-            .finally(() => {
-                this.setState({
-                    loadState: "",
-                });
-            });
-    };
-
-    updateWeather = (response) => {
-        this.setState({
-            currentWeather: response.current,
-            dailyWeather: response.daily,
-        });
-    };
-
-    componentDidMount = () => {
-        this.getWeather();
-    };
-
-    render() {
-        return (
-            <Router>
-                <Navbar bg="dark" variant="dark">
-                    <Navbar.Brand>Weather Watch</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="mr-auto">
-                            <Link
-                                to="/Luton"
-                                className="nav-link text-danger"
-                                onClick={() => this.changeLocation("Luton")}
+    return (
+        <Router>
+            <Navbar bg="dark" variant="dark">
+                <Navbar.Brand>Weather Watch</Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav className="mr-auto">
+                        <Link
+                            to="/Luton"
+                            className="nav-link text-danger"
+                            onClick={() => changeLocation("Luton")}
+                        >
+                            Luton
+                        </Link>
+                        <Link
+                            to="/London"
+                            className="nav-link text-danger"
+                            onClick={() => changeLocation("London")}
+                        >
+                            London
+                        </Link>
+                        <Link
+                            to="/Sheffield"
+                            className="nav-link text-danger"
+                            onClick={() => changeLocation("Sheffield")}
+                        >
+                            Sheffield
+                        </Link>
+                    </Nav>
+                </Navbar.Collapse>
+            </Navbar>
+            <Container>
+                <Switch>
+                    <Route path="/Luton">
+                        <div className="header">
+                            <h1
+                                style={{
+                                    textAlign: "center",
+                                    marginTop: "20px",
+                                }}
                             >
-                                Luton
-                            </Link>
-                            <Link
-                                to="/London"
-                                className="nav-link text-danger"
-                                onClick={() => this.changeLocation("London")}
+                                {location}{" "}
+                                <span className="header-info">
+                                    (currently {currentWeather.temp}
+                                    °C)
+                                </span>
+                            </h1>
+                        </div>
+                        <Row>
+                            <ReactCardCarousel disable_box_shadow={true}>
+                                {createCards()}
+                            </ReactCardCarousel>
+                        </Row>
+                    </Route>
+                    <Route path="/London">
+                        <div id="header">
+                            <h1
+                                style={{
+                                    textAlign: "center",
+                                    marginTop: "20px",
+                                }}
                             >
-                                London
-                            </Link>
-                            <Link
-                                to="/Sheffield"
-                                className="nav-link text-danger"
-                                onClick={() => this.changeLocation("Sheffield")}
+                                {location}{" "}
+                                <span
+                                    style={{
+                                        fontWeight: "normal",
+                                        fontSize: "2rem",
+                                    }}
+                                >
+                                    (currently {currentWeather.temp}
+                                    °C)
+                                </span>
+                            </h1>
+                        </div>
+                        <Row>
+                            <ReactCardCarousel disable_box_shadow={true}>
+                                {createCards()}
+                            </ReactCardCarousel>
+                        </Row>
+                    </Route>
+                    <Route path="/Sheffield">
+                        <div id="header">
+                            <h1
+                                style={{
+                                    textAlign: "center",
+                                    marginTop: "20px",
+                                }}
                             >
-                                Sheffield
-                            </Link>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Navbar>
-                <Container>
-                    <Switch>
-                        <Route path="/Luton">
-                            <div className="header">
-                                <h1
+                                {location}{" "}
+                                <span
                                     style={{
-                                        textAlign: "center",
-                                        marginTop: "20px",
+                                        fontWeight: "normal",
+                                        fontSize: "2rem",
                                     }}
                                 >
-                                    {this.state.location}{" "}
-                                    <span className="header-info">
-                                        (currently{" "}
-                                        {this.state.currentWeather.temp}
-                                        °C)
-                                    </span>
-                                </h1>
-                            </div>
-                            <Row>
-                                <ReactCardCarousel disable_box_shadow={true}>
-                                    {this.createCards()}
-                                </ReactCardCarousel>
-                            </Row>
-                        </Route>
-                        <Route path="/London">
-                            <div id="header">
-                                <h1
+                                    (currently {currentWeather.temp}
+                                    °C)
+                                </span>
+                            </h1>
+                        </div>
+                        <Row>
+                            <ReactCardCarousel disable_box_shadow={true}>
+                                {createCards()}
+                            </ReactCardCarousel>
+                        </Row>
+                    </Route>
+                    <Route exact path="/">
+                        <div id="header">
+                            <h1
+                                style={{
+                                    textAlign: "center",
+                                    marginTop: "20px",
+                                }}
+                            >
+                                {location}{" "}
+                                <span
                                     style={{
-                                        textAlign: "center",
-                                        marginTop: "20px",
+                                        fontWeight: "normal",
+                                        fontSize: "2rem",
                                     }}
                                 >
-                                    {this.state.location}{" "}
-                                    <span
-                                        style={{
-                                            fontWeight: "normal",
-                                            fontSize: "2rem",
-                                        }}
-                                    >
-                                        (currently{" "}
-                                        {this.state.currentWeather.temp}
-                                        °C)
-                                    </span>
-                                </h1>
-                            </div>
-                            <Row>
-                                <ReactCardCarousel disable_box_shadow={true}>
-                                    {this.createCards()}
-                                </ReactCardCarousel>
-                            </Row>
-                        </Route>
-                        <Route path="/Sheffield">
-                            <div id="header">
-                                <h1
-                                    style={{
-                                        textAlign: "center",
-                                        marginTop: "20px",
-                                    }}
-                                >
-                                    {this.state.location}{" "}
-                                    <span
-                                        style={{
-                                            fontWeight: "normal",
-                                            fontSize: "2rem",
-                                        }}
-                                    >
-                                        (currently{" "}
-                                        {this.state.currentWeather.temp}
-                                        °C)
-                                    </span>
-                                </h1>
-                            </div>
-                            <Row>
-                                <ReactCardCarousel disable_box_shadow={true}>
-                                    {this.createCards()}
-                                </ReactCardCarousel>
-                            </Row>
-                        </Route>
-                        <Route exact path="/">
-                            <div id="header">
-                                <h1
-                                    style={{
-                                        textAlign: "center",
-                                        marginTop: "20px",
-                                    }}
-                                >
-                                    {this.state.location}{" "}
-                                    <span
-                                        style={{
-                                            fontWeight: "normal",
-                                            fontSize: "2rem",
-                                        }}
-                                    >
-                                        (currently{" "}
-                                        {this.state.currentWeather.temp}
-                                        °C)
-                                    </span>
-                                </h1>
-                            </div>
-                            <Row>
-                                <ReactCardCarousel disable_box_shadow={true}>
-                                    {this.createCards()}
-                                </ReactCardCarousel>
-                            </Row>
-                        </Route>
-                        <Route path="/">That location is not supported.</Route>
-                    </Switch>
-                </Container>
-            </Router>
-        );
-    }
-}
+                                    (currently {currentWeather.temp}
+                                    °C)
+                                </span>
+                            </h1>
+                        </div>
+                        <Row>
+                            <ReactCardCarousel disable_box_shadow={true}>
+                                {createCards()}
+                            </ReactCardCarousel>
+                        </Row>
+                    </Route>
+                    <Route path="/">That location is not supported.</Route>
+                </Switch>
+            </Container>
+        </Router>
+    );
+};
 
 export default WeatherWatch;
